@@ -93,19 +93,9 @@ void Player::Start(PlayMode mode,bool forceSongMode) {
  
 	viewData_->playMode_=(forceSongMode?PM_SONG:mode) ;
 
-  // See if we start from current song position
-  // or from last stored
-
+  // Always set position, allows for playing song with chain offset
   unsigned playPos=viewData_->songY_+viewData_->songOffset_ ;
-
-	if (forceSongMode==false)
-  {
-    lastSongPos_=playPos ;
-  } 
-  else 
-  {
-    playPos=lastSongPos_ ;
-  }
+  lastSongPos_ = playPos;
 
   // Clear all channel based data
 
@@ -143,7 +133,7 @@ void Player::Start(PlayMode mode,bool forceSongMode) {
       for (int i=0;i<8;i++)
       {
         mixer_->StartChannel(i) ;
-        updateSongPos(playPos,i) ;
+        updateSongPos(playPos, i, viewData_->chainRow_);
       }
     }
     break ;
@@ -173,7 +163,14 @@ void Player::Start(PlayMode mode,bool forceSongMode) {
       updateSongPos(playPos,currentChannel,currentChainPos) ;
     }
     break ;
-      
+    case PM_AUDITION: {
+	    int currentChannel = viewData_->songX_;
+	    mixer_->StartChannel(currentChannel);
+	    int currentChainPos = viewData_->chainRow_;
+	    int currentPhrasePos = viewData_->phraseCurPos_;
+	    // uses hop for PhrasePos
+	    updateSongPos(playPos, currentChannel, currentChainPos, currentPhrasePos);
+	} break;
 		default:
 			NInvalid ;
 			break ;
@@ -307,7 +304,7 @@ void Player::OnStartButton(PlayMode origin,unsigned int from,bool startFromPrevi
 
 			// If sequencer not running, start otherwise stop
 
-			if (isRunning_) {
+			if (isRunning_ && viewData_->playMode_ != PM_AUDITION) {
 				Stop() ;
 			} else {
 				for (int i=0;i<SONG_CHANNEL_COUNT;i++) {
@@ -330,7 +327,7 @@ void Player::OnSongStartButton(unsigned int from,unsigned int to,bool requestSto
 
 			// If sequencer not running, start otherwise stop
 
-			if (isRunning_) {
+			if (isRunning_ && viewData_->playMode_ != PM_AUDITION) {
 				if (!forceImmediate) {
 					Stop() ;
 				} else {
@@ -518,7 +515,9 @@ void Player::Update(Observable &o,I_ObservableData *d) {
 				} ;
 				retrigAllImmediate_=false ;
 			}
-			moveToNextStep() ;
+			// Don't advance in audition mode
+			if (viewData_->playMode_ != PM_AUDITION)
+				moveToNextStep() ;
 			if (triggerLiveChains_) {
 				triggerLiveChains() ;
 			} ;
@@ -533,8 +532,8 @@ void Player::Update(Observable &o,I_ObservableData *d) {
 		}
 
 		// Process commands in current phrase
-
-	   ProcessCommands() ;
+	   if (viewData_->playMode_ != PM_AUDITION)
+			ProcessCommands() ;
 		
 	   // Initialise retrigger table
 	   int instrRetrigger[SONG_CHANNEL_COUNT] ;

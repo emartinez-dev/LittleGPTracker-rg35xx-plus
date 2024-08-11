@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------------
 
 PLATFORM:=  RASPI
-
+FONT := original.bmp
 include $(PWD)/Makefile.$(PLATFORM)
 
 #---------------------------------------------------------------------------------
@@ -73,7 +73,6 @@ RASPIDIRS :=                      ../sources/Adapters/Unix/FileSystem \
                                 ../sources/Adapters/Jack/Audio\
                                 ../sources/Adapters/Jack/Midi\
                                 ../sources/Adapters/Jack/Client\
-                                ../sources/Adapters/Jack/Midi\
                                 ../sources/Adapters/RTAudio\
                                 ../sources/Adapters/RTMidi\
                                 ../sources/Adapters/SDL/Timer\
@@ -169,7 +168,21 @@ MIYOODIRS      :=    . \
 				../sources/Adapters/SDL/GUI \
 				../sources/Adapters/SDL/Timer
 
-RG35XXHDIRS      :=    . \
+RG35XXDIRS      :=    . \
+				../sources/Adapters/DINGOO/Main \
+				../sources/Adapters/Unix/FileSystem \
+				../sources/System/Process \
+				../sources/Adapters/Unix/Process \
+				../sources/Adapters/DINGOO/System \
+				../sources/Adapters/SDL/Audio \
+				../sources/Adapters/SDL/Process \
+				../sources/Adapters/SDL/GUI \
+				../sources/Adapters/SDL/Timer\
+				../sources/Adapters/Dummy/Midi
+# ../sources/Adapters/RTMidi \ # Disabled for now
+# ../sources/Externals/RtMidi
+
+RG35XXHDIRS     :=    . \
 				../sources/Adapters/DINGOO/Main \
 				../sources/Adapters/Unix/FileSystem \
 				../sources/System/Process \
@@ -314,6 +327,25 @@ MIYOOFILES    :=  GPSDLMain.o \
 					DummyMidi.o \
 					SDLGUIWindowImp.o 
 
+RG35XXFILES    :=  GPSDLMain.o \
+					UnixFileSystem.o \
+					SDLAudio.o \
+					Process.o \
+					UnixProcess.o \
+					SDLAudioDriver.o \
+					MIYOOSystem.o \
+					DINGOOEventQueue.o \
+					SDLProcess.o \
+					SDLTimer.o \
+					GUIFactory.o \
+					SDLEventManager.o \
+					DummyMidi.o \
+					SDLGUIWindowImp.o
+# RtMidi.o \	#Disabled for now
+# RTMidiService.o \
+# RTMidiOutDevice.o \
+# RTMidiInDevice.o \
+
 RG35XXHFILES    :=  GPSDLMain.o \
 					UnixFileSystem.o \
 					SDLAudio.o \
@@ -328,7 +360,6 @@ RG35XXHFILES    :=  GPSDLMain.o \
 					SDLEventManager.o \
 					DummyMidi.o \
 					SDLGUIWindowImp.o
-
 
 
 PSPFILES		:=	PSPmain.o  \
@@ -575,6 +606,7 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 #---------------------------------------------------------------------------------
 $(BUILD):
+	python3 ../sources/Resources/mkfont.py ../sources/Resources/$(FONT) ../sources/Resources/font.h
 	@[ -d $@ ] || mkdir -p $@
 	@make --no-print-directory -C $(BUILD) -f $(PWD)/Makefile
 
@@ -623,16 +655,14 @@ $(OUTPUT).beagle-exe	:	$(OFILES)
 endif
 #---------------------------------------------------------------------------------------
 
-# Make as many as possible
-# Build W32 first
+# Only build non-automated configs
 deploy:
-	make PLATFORM=PSP
-	make PLATFORM=DEB
-#	make PLATFORM=RS97
-#	make PLATFORM=BITTBOY
-	make PLATFORM=MIYOO
-	make PLATFORM=RG35XXH
-#	./resources/packaging/docker_steam.sh
+#	make PLATFORM=PSP
+#	make PLATFORM=DEB
+#	make PLATFORM=MIYOO
 	./resources/packaging/build_and_copy_from_pi.sh
 	./resources/packaging/build_and_copy_from_chip.sh
+#	make PLATFORM=BITTBOY
+#	make PLATFORM=RS97
+#	make PLATFORM=RG35XX
 	./resources/packaging/lgpt_package.sh

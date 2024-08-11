@@ -1,25 +1,7 @@
-<!--
-        Example CONFIG.XML
-        uncomment field to use
--->
 <CONFIG>
-    <!-- Screen size if windoed mode
-    <SCREENMULT value="3"/>
-    -->
-    <!-- Debugging and button conf
-    <DUMPEVENT value="YES"/>
-    -->
-    <!-- use if you want to put your tracks somewhere special
-            Must be absolute path
-    <ROOTFOLDER value="/home/pi/RetroPie/roms/ports/lgpt/"/>
-    -->
-    <!-- Useful if you don't want to clone your samplelib
-            Must be absolute path
-    <SAMPLELIB value="/home/pi/RetroPie/roms/ports/lgpt/"/>
-    -->
-    <!-- Uncomment to render
-    <RENDER value="FILE" />
-    -->
+	<DUMPEVENT value="YES"/><!--debug logging-->>
+	<SCREENMULT value="1"/> <!-- Does nothing on PSP -->
+
 <!-- Default colors below -->
     <BACKGROUND   value = "1D0A1F"/> <!--Background color-->
     <FOREGROUND   value = "F5EBFF"/> <!--Text color-->
@@ -31,7 +13,5 @@
     <ROWCOLOR1    value = "BA28F9"/> <!--Row count color 1 -->
     <ROWCOLOR2    value = "FF00FF"/> <!--Row count color 2-->
     <ALTROWNUMBER value = "4"/>      <!--How many rows before alternating-->
-    <MAJORBEAT    value = "BA28F9"/> <!--major beat color -->
-    
 
 </CONFIG>

@@ -5,7 +5,7 @@ author m-.-n aka Marc Nostromo. The original work and
 releasing the source code has laid the foundation for
 everything included in this package.
 
-This build can be considered beta and has thus been tested
+This build can be considered stable and has thus been tested
 extensively. Please report any issues you could find
 via Github:
     https://github.com/djdiskmachine/LittleGPTracker/issues
@@ -15,7 +15,67 @@ projects but make sure to backup your old cherished work
 just to be safe <3
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-Changelog Jan 23 2024
+Changelog Jul 31 2024
+1.4.1-1
+    Fixes:
+        Boot crash for Miyoo, RG35XX
+    Update:
+        Install instructions for Miyoo, RG35XX
+
+1.4.1
+    Adds:
+        Play chain offset
+        When in chain view, pressing R+Start plays the current song row
+        starting at the offset from current chain row.
+    Fixes:
+        RG35XX no longer segfaults on boot
+        USB MIDI disabled due to missing OS dependencies
+        
+1.4.0
+    Adds:
+        Automated build for bittboy, Win32, PSP, Miyoo, Deb32, RG35XX
+        Shoutout to xquader for the initial RG35XX port (https://boosty.to/xquader)
+        License changed from CC-BY-SA-NC to GPL-3
+
+    * MVEL cmd    
+        Set step velocity for MIDI instruments
+        https://github.com/democloid/picoTracker/pull/163
+        
+        Author: @maks@fluttercommunity.social
+        Co-authored-by: djdiskmachine <djdiskmachine@proton.me>
+
+    * Config option to set major beat color in phrase screen
+
+        Author: koisignal <koitokakitsubata@gmail.com>
+        
+    * Deep clone
+        Clones selected chain and the phrases within
+        
+        Author: koisignal <koitokakitsubata@gmail.com>
+        Co-authored-by: djdiskmachine <djdiskmachine@proton.me>
+
+    * Font at build time
+        Modify sources/Resources/original.bmp __or__
+        FONT variable in Makefile
+
+    * Add audition (#87)
+        Adds note audition in phrase view
+        Original implementation by democloid: https://github.com/democloid/picoTracker/pull/86
+        Previews notes when entering new and modifying existing notes
+
+1.3o_2
+    Adds:
+        Alt row count colors, shoutout to https://github.com/edne !
+        00 and FE song screen colors, shoutout to https://github.com/koi-ikeno !
+        RG35XX build, thanks to https://github.com/jpma29 for help with testing!
+    Fixes:
+        Root folder detection causing issues with importing samples on some systems (thank you jpma29)
+        Name generator causing issues with importing samples on some systems (thanks Dosly)
+        Actually random names (fixed random seed, thx Eldsvåda:)
+        Save as fixed on MIYOO systems (thx Pret4t)
+    Other:
+        Refactor help legend
+
 1.3o-1
     First stable release!
     Fixed errors when random naming projects (shoutouts to 256k!)
